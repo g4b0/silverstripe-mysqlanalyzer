@@ -5,7 +5,7 @@ global $databaseConfig;
 /* @var $res mysqli_result */
 $mysqli = new mysqli($databaseConfig['server'], $databaseConfig['username'], $databaseConfig['password'], $databaseConfig['database']);
 
-//$conn->query("RESET QUERY CACHE");
+//$mysqli->query("RESET QUERY CACHE");
 
 // Colleziono i dati relativi alla cache prima dell'esecuzione
 $res = $mysqli->query("show status like 'Qcache_hits' ");
@@ -41,6 +41,7 @@ foreach ($sql_arr_tmp as $sql) {
 
 $hit_cnt = 0;
 $nohit_cnt = 0;
+$t = 0;
 $sql_arr_tmp = array();
 foreach ($sql_arr as $sql => $data) {
 	
@@ -65,6 +66,7 @@ foreach ($sql_arr as $sql => $data) {
 	$time = $time_end - $time_start;
 	$time_ms = $time*1000;
 	
+	$t += $time_ms;
 	$data['time'] = round($time_ms, 3);
 		
 	// Colleziono i dati relativi alla cache dopo la query
@@ -105,15 +107,23 @@ $hit = $hit_stop -$hit_start;
 $nohit = $nohit_stop - $nohit_start;
 $insert = $insert_stop - $insert_start;
 
+// calcolo il total query time
+$t2 = 0;
+foreach ($sql_arr as $sql => $data) {
+	$t2 += $data['cnt']*$data['time'];
+}
+
 echo "TOTAL QUERY: $c\n";
 echo "UNIQUE QUERY: " .count($sql_arr) . "\n";
 echo "CACHE HIT: $hit\n";
 echo "CACHE MISS: $nohit\n";
 echo "CACHE INSERT: $insert\n";
 echo "FREE CACHE MEM: " . $free_mem/1024/1024 . " MB\n";
+echo "TOTAL QUERY TIME:". round($t2, 3) ." ms\n";
+echo "TOTAL QUERY TIME (no dup):". round($t, 3) ." ms\n";
 
 echo "\nDUPLICATED QUERY: \n";
-echo "occ.\tc. hit\tsql\n";
+echo "occ.\tc. hit\ttime\tsql\n";
 
 // Ordino l'array per numero di occorrenze delle query
 uasort($sql_arr, function($a, $b) {
@@ -122,7 +132,7 @@ uasort($sql_arr, function($a, $b) {
 
 foreach ($sql_arr as $sql => $data) {
 	if ($sql_arr[$sql]['cnt'] > 1) {
-		echo '[' . $sql_arr[$sql]['cnt'] . ']' . "\t[" . $sql_arr[$sql]['cache_hit'] . "]\t" . "$sql\n"; 
+		echo '[' . $sql_arr[$sql]['cnt'] . ']' . "\t[" . $sql_arr[$sql]['cache_hit'] . "]\t[" . $sql_arr[$sql]['time'] ."]\t$sql\n"; 
 	}
 }
 

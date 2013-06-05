@@ -5,6 +5,7 @@ Mysql performance analyzer
 
 ## Important
 This module is intended for development, don't use it in production unless you want to analyze it. 
+Pull request https://github.com/silverstripe/silverstripe-framework/pull/2063 need to be merged in order to have the module working
 
 ## Requirements
 

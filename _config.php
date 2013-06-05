@@ -1,7 +1,8 @@
 <?php
 define('MYSQL_ANALYZER_BASE', basename(dirname(__FILE__)));
+define('MYSQL_ANALYZER_SLOW_QUERIES_THRESHOLD', 0.5); //ms
 
-$enabled = false;
+$enabled = true;
 
 if ($enabled) {
 	define('SS_DATABASE_CLASS', 'MySQLAnalyzer');

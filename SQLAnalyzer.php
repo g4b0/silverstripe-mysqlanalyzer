@@ -131,11 +131,13 @@ echo "occ.\tc. hit\ttime\tsql\n";
 
 // Ordino l'array per tempo di esecuzione delle query
 uasort($sql_arr, function($a, $b) {
-    return $b['time'] - $a['time'];
+    return ($b['time'] > $a['time'])?true:false;
 });
 
 foreach ($sql_arr as $sql => $data) {
-	echo '[' . $sql_arr[$sql]['cnt'] . ']' . "\t[" . $sql_arr[$sql]['cache_hit'] . "]\t[" . $sql_arr[$sql]['time'] ."]\t$sql\n"; 
+	if ($sql_arr[$sql]['time'] > MYSQL_ANALYZER_SLOW_QUERIES_THRESHOLD) {
+		echo '[' . $sql_arr[$sql]['cnt'] . ']' . "\t[" . $sql_arr[$sql]['cache_hit'] . "]\t[" . $sql_arr[$sql]['time'] ."]\t$sql\n"; 
+	}
 }
 
 echo "\nCACHE HIT QUERY [$hit_cnt]: \n";

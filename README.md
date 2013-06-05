@@ -29,9 +29,9 @@ Pull request https://github.com/silverstripe/silverstripe-framework/pull/2063 ne
 - In a browser append ?collectqueries=1 to the URL of the page you like to test. A sql.txt file will be created with all the queries separated by ||.
 - Run SQLAnalyzer php via cli script and enjoy its useful output.
 
-example:
-http://sstest.zk/?collectqueries=1 [browser]
-php5 /path/to/module/SQLAnalyzer.php [cli]
+* example:
+  * http://sstest.zk/?collectqueries=1 [browser]
+  * php5 /path/to/module/SQLAnalyzer.php [cli]
 
 ## Changelog
 

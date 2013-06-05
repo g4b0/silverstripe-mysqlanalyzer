@@ -1,7 +1,7 @@
 <?php
 define('MYSQL_ANALYZER_BASE', basename(dirname(__FILE__)));
 
-$enabled = true;
+$enabled = false;
 
 if ($enabled) {
 	define('SS_DATABASE_CLASS', 'MySQLAnalyzer');
